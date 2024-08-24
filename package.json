@@ -1,6 +1,10 @@
 {
   "name": "app",
   "private": true,
+  "engines": {
+    "node": "20.17.0",
+    "yarn": "1.22.22"
+  },
   "devDependencies": {
     "esbuild": "^0.23.1"
   },
