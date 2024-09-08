@@ -64,3 +64,4 @@ MVP
 ■ 機能の実装方針予定
 Spotify API
 全文検索
+
