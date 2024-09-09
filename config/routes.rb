@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "search/index"
   resources :tasks
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -12,4 +13,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  get 'search', to: 'search#index'
+  get 'search/suggest_artists'
+  get 'search/suggest_tracks'
+
 end
