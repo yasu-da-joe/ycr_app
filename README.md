@@ -148,9 +148,9 @@ user_id
 favorit_user_id
 
 コンサートテーブル[Concerts]
-concert_name: コンサート名（イベント名）
-concert_date: 開演日時
-concert_artist: アーティスト名
+name: コンサート名（イベント名）
+date: 開演日時
+artist: アーティスト名
 
 レポートテーブル[Reports]
 user_id
@@ -166,22 +166,22 @@ favorit_report_id
 
 レポート本文テーブル[Report_bodies]
 report_id
-report_body: コンサート全体感想
+body: コンサート全体感想
 ※将来的にカスタマイズで複数項目になる可能性があるためテーブルを分ける
 
 セクション区切り設定[Sections]
 report_id
-section_name: 区切り名
-sectoin_order: 区切り位置
+name: 区切り名
+order: 区切り位置
 
 曲テーブル[Songs]
-song_name: 曲名
-song_artist: アーティスト名
+name: 曲名
+artist: アーティスト名
 spotify_track_id: Spotify曲ID
 spotify_url: SpotifyURL
 
 セットリストテーブル[Set_list_orders]
 section_id
 song_id
-song_order: 曲順
-song_impression: 曲感想
+order: 曲順
+body: 曲感想本文
