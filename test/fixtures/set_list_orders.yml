@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  section: one
+  song: one
+  order: 1
+  body: MyText
+
+two:
+  section: two
+  song: two
+  order: 1
+  body: MyText

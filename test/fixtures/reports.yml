@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  concert: one
+  is_spoiler: false
+  spoiler_until: 2024-09-20
+  report_status: 1
+
+two:
+  user: two
+  concert: two
+  is_spoiler: false
+  spoiler_until: 2024-09-20
+  report_status: 1
