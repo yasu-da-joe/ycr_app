@@ -54,8 +54,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  get 'search', to: 'search#index'
-  get 'search/suggest_artists'
-  get 'search/suggest_tracks'
-
+  get "search", to: "search#index"
+  get "search/suggest_artists"
+  get "search/suggest_tracks"
 end
