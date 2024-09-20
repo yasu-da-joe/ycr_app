@@ -353,9 +353,11 @@ DEPENDENCIES
   dotenv-rails
   jbuilder
   jsbundling-rails
+  omniauth-oauth2
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 7.2.1)
+  rest-client
   rspotify
   rubocop-rails-omakase
   selenium-webdriver
