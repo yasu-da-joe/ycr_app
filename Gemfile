@@ -41,6 +41,10 @@ gem "rspotify"
 gem "dotenv-rails"
 gem "omniauth-oauth2"
 gem "rest-client"
+gem 'sassc-rails'
+gem 'sorcery'
+gem 'validates_email_format_of'
+gem 'rails-i18n'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

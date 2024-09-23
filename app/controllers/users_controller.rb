@@ -1,22 +1,34 @@
 class UsersController < ApplicationController
-  def index
-  end
-
-  def show
-  end
+  before_action :require_login, only: [:mypage]
 
   def new
+    @user = User.new
   end
 
   def create
-  end
-
-  def edit
-  end
-
-  def update
+    @user = User.new(user_params)
+    if @user.save
+      auto_login(@user)
+      flash[:success] = "ユーザー登録が成功しました"
+      redirect_to mypage_path
+    else
+      flash.now[:danger] = @user.errors.full_messages.join(", ")
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def destroy
+    logout
+    redirect_to root_path, status: :see_other
+  end
+
+  def mypage
+    @user = current_user
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 end

@@ -33,7 +33,11 @@ RUN bundle install
 COPY . /myapp
 
 # 依存関係が正しくインストールされたか確認
-RUN yarn install --check-files
+RUN yarn install
 
 # Node.js、Yarn、依存関係のバージョンを確認
 RUN node --version && yarn --version && yarn list --depth=0
+
+RUN yarn add postcss postcss-cli autoprefixer
+
+RUN npm install -g yarn@${YARN_VERSION} nodemon esbuild sass postcss postcss-cli autoprefixer

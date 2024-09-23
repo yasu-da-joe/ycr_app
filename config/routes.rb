@@ -1,45 +1,19 @@
 Rails.application.routes.draw do
-  get "set_list_orders/create"
-  get "set_list_orders/update"
-  get "set_list_orders/destroy"
-  get "songs/index"
-  get "songs/show"
-  get "songs/new"
-  get "songs/create"
-  get "songs/edit"
-  get "songs/update"
-  get "songs/destroy"
-  get "user_favorites/create"
-  get "user_favorites/destroy"
-  get "sections/create"
-  get "sections/update"
-  get "sections/destroy"
-  get "report_bodies/create"
-  get "report_bodies/update"
-  get "report_favorites/create"
-  get "report_favorites/destroy"
-  get "reports/index"
-  get "reports/show"
-  get "reports/new"
-  get "reports/create"
-  get "reports/edit"
-  get "reports/update"
-  get "reports/destroy"
-  get "users/index"
-  get "users/show"
-  get "users/new"
-  get "users/create"
-  get "users/edit"
-  get "users/update"
-  get "users/destroy"
-  get "concerts/index"
-  get "concerts/show"
-  get "concerts/new"
-  get "concerts/create"
-  get "concerts/edit"
-  get "concerts/update"
-  get "concerts/destroy"
-  get "search/index"
+  resources :set_list_orders, only: [:create, :update, :destroy]
+  resources :songs
+  resources :user_favorites, only: [:create, :destroy]
+  resources :sections, only: [:create, :update, :destroy]
+  resources :report_bodies, only: [:create, :update]
+  resources :report_favorites, only: [:create, :destroy]
+  resources :reports
+  resources :users
+  resources :concerts
+  get 'search/index'
+  get 'login', to: 'user_sessions#new', as: :login
+  post 'login', to: 'user_sessions#create'
+  get 'mypage', to: 'users#mypage', as: :mypage
+  delete 'logout', to: 'user_sessions#destroy', as: :logout
+
   resources :tasks
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

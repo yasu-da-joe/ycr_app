@@ -1,2 +1,26 @@
-<h1>Users#new</h1>
-<p>Find me in app/views/users/new.html.erb</p>
+<h1>新規登録画面</h1>
+<%= form_with(model: @user, local: true, class: 'common-form') do |f| %>
+    <div class="form-group">
+        <p><%= f.label :name, 'ユーザー名（表示名）' %></p>
+        <%= f.text_field :name %>
+    </div>
+
+    <div class="form-group">
+        <p><%= f.label :email, 'メールアドレス' %></p>
+        <%= f.email_field :email %>
+    </div>
+
+    <div class="form-group">
+        <p><%= f.label :password, 'パスワード' %></p>
+        <%= f.password_field :password %>
+    </div>
+
+    <div class="form-group">
+        <p><%= f.label :password_confirmation, 'パスワード（確認）' %></p>
+        <%= f.password_field :password_confirmation %>
+    </div>
+
+    <div class="form-group">
+        <%= f.submit '新規登録', class: 'submit-button' %>
+    </div>
+<% end %>

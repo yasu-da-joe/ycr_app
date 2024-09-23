@@ -14,11 +14,19 @@
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
     <%= javascript_include_tag 'search', 'data-turbolinks-track': 'reload' , defer: true %>  
+    <%= stylesheet_link_tag "custom", :media => "all" %>
     </head>
-  <body>
+<body>
+  <%= render 'shared/flash_message' %>
+  <%= render 'layouts/header' %>
+
+  <main>
     <%= yield %>
-  </body>
+  </main>
+
+  <%= render 'layouts/footer' %>
+</body>
 </html>
