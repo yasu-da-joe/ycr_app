@@ -5,8 +5,8 @@ class SearchController < ApplicationController
   def suggest_artists
     query = params[:query]
     if query.present?
-      RSpotify.authenticate(ENV['SPOTIFY_CLIENT_ID'], ENV['SPOTIFY_CLIENT_SECRET'])
-      artists = RSpotify::Artist.search(query, limit: 5, market: 'JP')
+      RSpotify.authenticate(ENV["SPOTIFY_CLIENT_ID"], ENV["SPOTIFY_CLIENT_SECRET"])
+      artists = RSpotify::Artist.search(query, limit: 5, market: "JP")
       suggestions = artists.map { |artist| { id: artist.id, name: artist.name } }
       render json: suggestions
     else
@@ -21,14 +21,14 @@ class SearchController < ApplicationController
     Rails.logger.info "Received params for suggest_tracks: #{params.inspect}"
     artist_name = params[:artist_name]
     track_query = params[:query]
-    
+
     if artist_name.present? && track_query.present?
-      RSpotify.authenticate(ENV['SPOTIFY_CLIENT_ID'], ENV['SPOTIFY_CLIENT_SECRET'])
-      
+      RSpotify.authenticate(ENV["SPOTIFY_CLIENT_ID"], ENV["SPOTIFY_CLIENT_SECRET"])
+
       # アーティスト名と曲名の組み合わせで検索
       search_query = "artist:#{artist_name} track:#{track_query}"
-      tracks = RSpotify::Track.search(search_query, limit: 10, market: 'JP')
-      
+      tracks = RSpotify::Track.search(search_query, limit: 10, market: "JP")
+
       suggestions = tracks.map do |track|
         {
           id: track.id,
@@ -38,7 +38,7 @@ class SearchController < ApplicationController
           release_date: track.album.release_date
         }
       end
-      
+
       render json: suggestions
     else
       render json: []

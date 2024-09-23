@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_20_122433) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_22_103345) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_122433) do
     t.string "artist"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_concerts_on_date"
   end
 
   create_table "report_bodies", force: :cascade do |t|
@@ -30,14 +31,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_122433) do
     t.index ["report_id"], name: "index_report_bodies_on_report_id"
   end
 
-  create_table "report_favorits", force: :cascade do |t|
+  create_table "report_favorites", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "report_id"
-    t.integer "favorit_report_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["report_id"], name: "index_report_favorits_on_report_id"
-    t.index ["user_id"], name: "index_report_favorits_on_user_id"
+    t.index ["report_id"], name: "index_report_favorites_on_report_id"
+    t.index ["user_id", "report_id"], name: "index_report_favorites_on_user_id_and_report_id", unique: true
+    t.index ["user_id"], name: "index_report_favorites_on_user_id"
   end
 
   create_table "reports", force: :cascade do |t|
@@ -45,7 +46,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_122433) do
     t.bigint "concert_id", null: false
     t.boolean "is_spoiler"
     t.date "spoiler_until"
-    t.integer "report_status"
+    t.integer "report_status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["concert_id"], name: "index_reports_on_concert_id"
@@ -79,6 +80,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_122433) do
     t.string "spotify_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["artist"], name: "index_songs_on_artist"
+    t.index ["name"], name: "index_songs_on_name"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -87,12 +90,13 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_122433) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "user_favorits", force: :cascade do |t|
+  create_table "user_favorites", force: :cascade do |t|
     t.bigint "user_id"
-    t.integer "favorit_user_id"
+    t.integer "favorited_user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_user_favorits_on_user_id"
+    t.index ["user_id", "favorited_user_id"], name: "index_user_favorites_on_user_id_and_favorited_user_id", unique: true
+    t.index ["user_id"], name: "index_user_favorites_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -103,15 +107,19 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_122433) do
     t.string "profile_image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "crypted_password"
+    t.string "salt"
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "report_bodies", "reports"
-  add_foreign_key "report_favorits", "reports"
-  add_foreign_key "report_favorits", "users"
+  add_foreign_key "report_favorites", "reports"
+  add_foreign_key "report_favorites", "users"
   add_foreign_key "reports", "concerts"
   add_foreign_key "reports", "users"
   add_foreign_key "sections", "reports"
   add_foreign_key "set_list_orders", "sections"
   add_foreign_key "set_list_orders", "songs"
-  add_foreign_key "user_favorits", "users"
+  add_foreign_key "user_favorites", "users"
+  add_foreign_key "user_favorites", "users", column: "favorited_user_id"
 end

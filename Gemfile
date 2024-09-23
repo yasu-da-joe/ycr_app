@@ -37,10 +37,14 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-gem 'rspotify'
-gem 'dotenv-rails'
-gem 'omniauth-oauth2'
-gem 'rest-client'
+gem "rspotify"
+gem "dotenv-rails"
+gem "omniauth-oauth2"
+gem "rest-client"
+gem 'sassc-rails'
+gem 'sorcery'
+gem 'validates_email_format_of'
+gem 'rails-i18n'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

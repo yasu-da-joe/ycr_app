@@ -1,0 +1,200 @@
+body{
+  background-color: #F8EDE3;
+}
+
+h1{
+  height: 60px;
+  background-color: #C5705D;
+  text-align: center;
+  font-size: 16px;
+  color: #F8EDE3;
+  font-weight: normal;
+  line-height:60px;
+}
+
+
+/* flashメッセージ */
+#flash-messages {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  z-index: 1000;
+  width: 100%;
+  min-height: 55px;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.alert.fade-out {
+  opacity: 0;
+}
+
+.alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.alert-dismissible {
+  padding-right: 35px;
+}
+
+.alert-dismissible .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.75rem 1.25rem;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+}
+
+.alert-dismissible .close:hover,
+.alert-dismissible .close:focus {
+  color: inherit;
+  text-decoration: none;
+  opacity: .75;
+}
+/* flashメッセージ以上 */
+
+/* ヘッダ関連 */
+.site-header {
+  background-color: #F8EDE3;
+  height: 54px;
+  display: flex;
+  align-items: center;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.hamburger-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  cursor: pointer;
+  padding-right: 50px;
+}
+
+.hamburger-menu span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: #C5705D;
+}
+
+.logo{
+  display: flex;
+}
+
+.logo img {
+  height: 65px;
+  width: auto;
+}
+
+.btn-login {
+  color: #C5705D;
+  text-decoration: none;
+  padding: 8px 16px;
+}
+
+.btn-mypage{
+  color: #C5705D;
+  text-decoration: none;
+}
+/* ヘッダ関連以上 */
+
+/* フォーム関連 */
+.form-group{
+  width:300px;
+  margin: auto;
+  text-align: left;
+}
+
+.form-group p{
+  margin: 5px auto;
+  color: #C5705D;
+}
+
+.form-group input{
+  border: 1px solid #C5705D;
+  border-radius:8px;
+  width: 300px;
+  margin-bottom: 10px;
+  height: 2.5em;
+}
+
+.submit-button{
+  width: 140px;
+  height: 42px;
+  background-color: #C5705D;
+  color: #F8EDE3;
+  margin-top: 24px;
+}
+/* フォーム関連以上 */
+
+/* フッター関連 */
+.site-footer {
+  background-color: #C5705D;
+  padding: 20px 0;
+  margin-top: 30px;
+  color: #F8EDE3;
+  font-size: 10px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.footer-menu {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.footer-menu p {
+  margin: 0 15px;
+}
+
+.footer-menu a {
+  color: #F8EDE3;
+  text-decoration: none;
+}
+
+.footer-menu a:hover {
+  text-decoration: underline;
+}
+
+.copyright {
+  text-align: center;
+  margin: 0;
+}
+/* フッター関連以上 */

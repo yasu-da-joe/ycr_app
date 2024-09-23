@@ -1,0 +1,22 @@
+<header class="site-header">
+  <div class="header-content">
+    <div class="hamburger-menu">
+      <!-- ハンバーガーメニューのアイコン -->
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    
+    <div class="logo">
+      <%= image_tag 'kimirepo_logo.webp', alt: 'キミレポロゴ' %>
+    </div>
+    
+    <div class="user-action">
+      <% if user_signed_in? %>
+        <%= link_to 'マイページ', mypage_path, class: 'btn-mypage' %>
+      <% else %>
+        <%= link_to 'ログイン', login_path, class: 'btn-login' %>
+      <% end %>
+    </div>
+  </div>
+</header>
