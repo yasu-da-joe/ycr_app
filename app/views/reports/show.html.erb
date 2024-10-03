@@ -1,2 +1,56 @@
-<h1>Reports#show</h1>
-<p>Find me in app/views/reports/show.html.erb</p>
+<h1><%= @report.concert_name %></h1>
+
+<h2>曲リスト</h2>
+<ul id="song-list">
+  <% @report.songs.each do |song| %>
+    <li><%= song.name %> - <%= song.artist %></li>
+  <% end %>
+</ul>
+
+<button id="add-song-btn" class="btn btn-primary">曲を追加</button>
+<button id="save-songs-btn" class="btn btn-success">保存</button>
+
+<%= render 'add_song_modal' %>
+
+<script>
+  document.addEventListener('turbolinks:load', () => {
+    const addSongBtn = document.getElementById('add-song-btn');
+    const saveSongsBtn = document.getElementById('save-songs-btn');
+    const modal = document.getElementById('addSongModal');
+    const songList = document.getElementById('song-list');
+
+    addSongBtn.addEventListener('click', () => {
+      $(modal).modal('show');
+    });
+
+    document.getElementById('add-song-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch('<%= add_temp_song_report_path(@report) %>', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        songList.innerHTML = data.map(song => `<li>${song.name} - ${song.artist}</li>`).join('');
+        $(modal).modal('hide');
+        e.target.reset();
+      });
+    });
+
+    saveSongsBtn.addEventListener('click', () => {
+      fetch('<%= save_songs_report_path(@report) %>', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        }
+      })
+      .then(() => {
+        window.location.reload();
+      });
+    });
+  });
+</script>

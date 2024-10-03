@@ -14,3 +14,4 @@ Rails.application.config.assets.paths << Rails.root.join("app/assets/builds")
 # Rails.application.config.assets.precompile += %w[ admin.js admin.css ]
 Rails.application.config.assets.precompile += %w( *.png *.jpg *.jpeg *.gif *.webp )
 Rails.application.config.assets.precompile += %w( application.css application.js search.js )
+Rails.application.config.assets.precompile += %w( custom.scss )
