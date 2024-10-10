@@ -1,11 +1,15 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["form", "songsList"]
+  static targets = ["form", "songsList", "songsCount"]
 
   connect() {
-    console.log("Report controller connected")
-    this.modal = null
+    console.log("Report controller connected");
+    this.modal = null;
+    
+    // 残存するバックドロップを削除
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
+    document.body.classList.remove('modal-open');
   }
 
   async addSong(event) {
@@ -31,15 +35,26 @@ export default class extends Controller {
       })
     
       if (response.ok) {
-        const html = await response.text()
-        const modalElement = document.getElementById('song-modal')
-        modalElement.querySelector('.modal-content').innerHTML = html
-        this.modal = new bootstrap.Modal(modalElement)
-        this.modal.show()
+        const html = await response.text();
+        const modalElement = document.getElementById('song-modal');
+        modalElement.querySelector('.modal-content').innerHTML = html;
+        
+        // 既存のモーダルインスタンスがあれば破棄
+        if (this.modal) {
+          this.modal.dispose();
+        }
+        
+        // 新しいモーダルインスタンスを作成
+        this.modal = new bootstrap.Modal(modalElement, {
+          backdrop: 'static',  // ユーザーが外側をクリックしてもモーダルが閉じないようにする
+          keyboard: false  // Escキーでモーダルが閉じないようにする
+        });
+        
+        this.modal.show();
 
-        modalElement.addEventListener('hidden.bs.modal', this.handleModalHidden.bind(this))
+        modalElement.addEventListener('hidden.bs.modal', this.handleModalHidden.bind(this));
       } else {
-        console.error('Failed to load song form:', response.status, response.statusText)
+        console.error('Failed to load song form:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error in addSong:', error)
@@ -47,12 +62,7 @@ export default class extends Controller {
   }
 
   handleModalHidden() {
-    if (this.modal) {
-      this.modal.dispose()
-      this.modal = null
-    }
-    document.body.classList.remove('modal-open')
-    document.querySelector('.modal-backdrop')?.remove()
+    this.closeModal()
   }
 
   async submitSong(event) {
@@ -60,62 +70,83 @@ export default class extends Controller {
     const form = event.target
     const formData = new FormData(form)
   
-    const response = await fetch(form.action, {
-      method: form.method,
-      body: formData,
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'Accept': 'application/json'
-      }
-    })
-
-    if (response.ok) {
+    try {
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: formData,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/json'
+        }
+      })
+  
       const result = await response.json()
       if (result.success) {
         this.songsListTarget.insertAdjacentHTML('beforeend', result.html)
+        this.updateSongsCount()
         this.closeModal()
+        this.showFlashMessage(result.message, 'success')
       } else {
-        console.error('Failed to add song:', result.errors)
-        // エラーメッセージを表示するロジックをここに追加
+        this.showFlashMessage(result.errors.join(', '), 'error')
+        // フォーム内のエラーメッセージを表示する処理をここに追加
       }
-    } else {
-      console.error('Failed to submit song form')
-      // エラーメッセージを表示するロジックをここに追加
+    } catch (error) {
+      console.error('Error in submitSong:', error)
+      this.showFlashMessage('予期せぬエラーが発生しました', 'error')
     }
   }
 
   closeModal() {
-    if (this.modal) {
-      this.modal.hide()
+    console.log('closeModal called');
+    // すべてのモーダルバックドロップを削除
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+      console.log('Removing backdrop:', backdrop);
+      backdrop.remove();
+    });
+  
+    const modalElement = document.getElementById('song-modal');
+    console.log('Modal element:', modalElement);
+    if (modalElement) {
+      const modalInstance = bootstrap.Modal.getInstance(modalElement);
+      console.log('Modal instance:', modalInstance);
+      if (modalInstance) {
+        modalInstance.hide();
+        modalInstance.dispose();
+        console.log('Modal hidden and disposed');
+      }
+      modalElement.querySelector('.modal-content').innerHTML = '';
+    }
+  
+    document.body.classList.remove('modal-open');
+    console.log('modal-open class removed from body');
+    this.modal = null;
+    console.log('this.modal set to null');
+  }
+
+  updateSongsCount() {
+    if (this.hassongsCountTarget) {
+      const currentCount = this.songsListTarget.querySelectorAll('.song-item').length
+      this.songsCountTarget.textContent = `曲数: ${currentCount}`
     }
   }
 
-  async submitSong(event) {
-    event.preventDefault()
-    const form = event.target
-    const formData = new FormData(form)
-  
-    const response = await fetch(form.action, {
-      method: form.method,
-      body: formData,
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-        'Accept': 'application/json'
-      }
-    })
-
-    if (response.ok) {
-      const result = await response.json()
-      if (result.success) {
-        this.songsListTarget.insertAdjacentHTML('beforeend', result.html)
-        bootstrap.Modal.getInstance(document.getElementById('song-modal')).hide()
-      } else {
-        console.error('Failed to add song:', result.errors)
-        // エラーメッセージを表示するロジックをここに追加
-      }
-    } else {
-      console.error('Failed to submit song form')
-      // エラーメッセージを表示するロジックをここに追加
+  showFlashMessage(message, type) {
+    const flashContainer = document.getElementById('flash-messages')
+    if (flashContainer) {
+      const alertClass = type === 'success' ? 'alert-success' : 'alert-danger'
+      const flashHtml = `
+        <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+          ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      `
+      flashContainer.innerHTML = flashHtml
+      setTimeout(() => {
+        const alert = flashContainer.querySelector('.alert')
+        if (alert) {
+          alert.remove()
+        }
+      }, 3000)
     }
   }
 
@@ -140,7 +171,7 @@ export default class extends Controller {
       return result.report_id;
     } catch (error) {
       console.error('Failed to initialize report:', error.message);
-      // ここでユーザーにエラーを通知することもできます
+      this.showFlashMessage('レポートの初期化に失敗しました', 'error');
       return null;
     }
   }
@@ -174,11 +205,11 @@ export default class extends Controller {
         window.location.href = result.redirect_url
       } else {
         console.error('Failed to save report:', result.errors)
-        // エラーメッセージを表示するロジックをここに追加
+        this.showFlashMessage('レポートの保存に失敗しました', 'error')
       }
     } else {
       console.error('Failed to submit report form')
-      // エラーメッセージを表示するロジックをここに追加
+      this.showFlashMessage('エラーが発生しました', 'error')
     }
   }
 
@@ -186,6 +217,8 @@ export default class extends Controller {
     const songItem = event.target.closest('.song-item')
     if (songItem) {
       songItem.remove()
+      this.updateSongsCount()
+      this.showFlashMessage('曲が削除されました', 'success')
     }
   }
 }

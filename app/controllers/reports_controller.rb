@@ -5,10 +5,24 @@ class ReportsController < ApplicationController
   def new
     @report.sections.build if @report.sections.empty?
     @report.sections.first.set_list_orders.build if @report.sections.first.set_list_orders.empty?
+
+
+    latest_report = current_user.reports.order(created_at: :desc).first
+    if latest_report
+      @existing_set_list_orders = SetListOrder.joins(:section)
+                                              .where(sections: { report_id: latest_report.id })
+                                              .includes(:song)
+                                              .order('sections.id')
+                                              .order('set_list_orders.order NULLS LAST')
+                                              .order(:created_at)
+    else
+      @existing_set_list_orders = []
+    end
   end
 
   def create
     @report.assign_attributes(report_params)
+    @set_list_order = @section.set_list_orders.build(set_list_order_params)
 
     if params[:draft]
       @report.report_status = :draft
@@ -22,6 +36,14 @@ class ReportsController < ApplicationController
       render json: { success: true, message: save_message, redirect_url: report_path(@report) }
     else
       render json: { success: false, errors: @report.errors.full_messages }, status: :unprocessable_entity
+    end
+
+    respond_to do |format|
+      if @set_list_order.save
+        format.json { render json: { success: true, html: render_to_string(partial: 'songs/song', locals: { set_list_order: @set_list_order }, layout: false) } }
+      else
+        format.json { render json: { success: false, errors: @set_list_order.errors.full_messages, html: render_to_string(partial: 'set_list_orders/form', locals: { set_list_order: @set_list_order }, layout: false) }, status: :unprocessable_entity }
+      end
     end
   end
 

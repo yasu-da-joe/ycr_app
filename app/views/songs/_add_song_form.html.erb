@@ -7,11 +7,17 @@
     <%= form.fields_for :song, @set_list_order.build_song do |song_form| %>
       <div class="form-group">
         <%= song_form.label :name, '曲名' %>
-        <%= song_form.text_field :name, class: 'form-control' %>
+        <%= song_form.text_field :name, class: "form-control #{'is-invalid' if @set_list_order.song&.errors&.include?(:name)}" %>
+        <% if @set_list_order.song&.errors&.include?(:name) %>
+          <div class="invalid-feedback"><%= @set_list_order.song.errors[:name].join(', ') %></div>
+        <% end %>
       </div>
       <div class="form-group">
         <%= song_form.label :artist, 'アーティスト' %>
-        <%= song_form.text_field :artist, class: 'form-control' %>
+        <%= song_form.text_field :artist, class: "form-control #{'is-invalid' if @set_list_order.song&.errors&.include?(:artist)}" %>
+        <% if @set_list_order.song&.errors&.include?(:artist) %>
+          <div class="invalid-feedback"><%= @set_list_order.song.errors[:artist].join(', ') %></div>
+        <% end %>
       </div>
     <% end %>
     <div class="form-group">

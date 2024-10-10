@@ -1,4 +1,8 @@
-<div class="song-item" data-song-id="<%= set_list_order.song.id %>">
-  <h4><%= set_list_order.song.name %> - <%= set_list_order.song.artist %></h4>
-  <p><%= set_list_order.body %></p>
-</div>
+<% if local_assigns[:set_list_order].present? && set_list_order.song.present? %>
+  <div class="song-item" data-song-id="<%= set_list_order.song.id %>" data-order="<%= set_list_order.order || set_list_order.created_at.to_i %>">
+    <h5><%= set_list_order.order ? "#{set_list_order.order}. " : "" %><%= set_list_order.song.name %> - <%= set_list_order.song.artist %></h5>
+    <p><%= set_list_order.body %></p>
+  </div>
+<% else %>
+  <p>曲情報が利用できません</p>
+<% end %>

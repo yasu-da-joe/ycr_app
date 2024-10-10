@@ -3,4 +3,6 @@ class SetListOrder < ApplicationRecord
   belongs_to :song
 
   accepts_nested_attributes_for :song
+  
+  validates_associated :song
 end
