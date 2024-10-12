@@ -1,126 +1,86 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["form", "songsList", "songsCount"]
+  static targets = ["form"]
 
   connect() {
-    console.log("Report controller connected");
-    this.modal = null;
-    
-    // 残存するバックドロップを削除
-    document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
-    document.body.classList.remove('modal-open');
+    console.log("Report controller connected")
+    this.modal = new bootstrap.Modal(document.getElementById('song-modal'))
+    document.getElementById('song-modal').addEventListener('hidden.bs.modal', this.handleModalHidden.bind(this))
   }
 
-  async addSong(event) {
-    try {
-      event.preventDefault()
+  addSong(event) {
+    event.preventDefault()
+    const reportId = this.formTarget.dataset.reportId
     
-      if (!this.formTarget.dataset.reportId) {
-        await this.initializeReport()
+    fetch(`/reports/${reportId}/add_song`, {
+      headers: {
+        'Accept': 'text/html'
       }
-    
-      const reportId = this.formTarget.dataset.reportId
-      if (!reportId) {
-        console.error('Failed to initialize report')
-        return
-      }
-    
-      const response = await fetch(`/reports/${reportId}/add_song`, {
-        method: 'GET',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-        }
-      })
-    
-      if (response.ok) {
-        const html = await response.text();
-        const modalElement = document.getElementById('song-modal');
-        modalElement.querySelector('.modal-content').innerHTML = html;
-        
-        // 既存のモーダルインスタンスがあれば破棄
-        if (this.modal) {
-          this.modal.dispose();
-        }
-        
-        // 新しいモーダルインスタンスを作成
-        this.modal = new bootstrap.Modal(modalElement, {
-          backdrop: 'static',  // ユーザーが外側をクリックしてもモーダルが閉じないようにする
-          keyboard: false  // Escキーでモーダルが閉じないようにする
-        });
-        
-        this.modal.show();
+    })
+    .then(response => response.text())
+    .then(html => {
+      document.querySelector('#song-modal .modal-content').innerHTML = html
+      this.modal.show()
+    })
+  }
 
-        modalElement.addEventListener('hidden.bs.modal', this.handleModalHidden.bind(this));
-      } else {
-        console.error('Failed to load song form:', response.status, response.statusText);
-      }
-    } catch (error) {
-      console.error('Error in addSong:', error)
+  closeModal(event) {
+    if (event) event.preventDefault()
+    this.modal.hide()
+  }
+
+  removeBackdrop() {
+    const backdrop = document.querySelector('.modal-backdrop')
+    if (backdrop) {
+      backdrop.remove()
     }
+    document.body.classList.remove('modal-open')
+    document.body.style.removeProperty('padding-right')
+    document.body.style.removeProperty('overflow')
   }
 
-  handleModalHidden() {
-    this.closeModal()
-  }
-
-  async submitSong(event) {
+  submitSong(event) {
     event.preventDefault()
     const form = event.target
     const formData = new FormData(form)
-  
-    try {
-      const response = await fetch(form.action, {
-        method: form.method,
-        body: formData,
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'Accept': 'application/json'
-        }
-      })
-  
-      const result = await response.json()
-      if (result.success) {
-        this.songsListTarget.insertAdjacentHTML('beforeend', result.html)
-        this.updateSongsCount()
-        this.closeModal()
-        this.showFlashMessage(result.message, 'success')
-      } else {
-        this.showFlashMessage(result.errors.join(', '), 'error')
-        // フォーム内のエラーメッセージを表示する処理をここに追加
+
+    fetch(form.action, {
+      method: form.method,
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
       }
-    } catch (error) {
-      console.error('Error in submitSong:', error)
-      this.showFlashMessage('予期せぬエラーが発生しました', 'error')
-    }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // 曲リストを更新
+        const songsList = document.getElementById('songs-list')
+        songsList.insertAdjacentHTML('beforeend', data.html)
+        
+        // 曲数を更新
+        const songsCount = document.getElementById('songs-count')
+        const currentCount = parseInt(songsCount.textContent.match(/\d+/)[0])
+        songsCount.textContent = `曲数: ${currentCount + 1}`
+
+        // モーダルを閉じる
+        this.modal.hide()
+        this.removeBackdrop()
+
+        // フラッシュメッセージを表示
+        const flashMessages = document.getElementById('flash-messages')
+        flashMessages.innerHTML = '<div class="alert alert-success">曲が追加されました</div>'
+      } else {
+        // エラーメッセージを表示
+        const errorContainer = form.querySelector('.error-messages')
+        errorContainer.innerHTML = data.errors.map(error => `<p>${error}</p>`).join('')
+      }
+    })
   }
 
-  closeModal() {
-    console.log('closeModal called');
-    // すべてのモーダルバックドロップを削除
-    document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
-      console.log('Removing backdrop:', backdrop);
-      backdrop.remove();
-    });
-  
-    const modalElement = document.getElementById('song-modal');
-    console.log('Modal element:', modalElement);
-    if (modalElement) {
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      console.log('Modal instance:', modalInstance);
-      if (modalInstance) {
-        modalInstance.hide();
-        modalInstance.dispose();
-        console.log('Modal hidden and disposed');
-      }
-      modalElement.querySelector('.modal-content').innerHTML = '';
-    }
-  
-    document.body.classList.remove('modal-open');
-    console.log('modal-open class removed from body');
-    this.modal = null;
-    console.log('this.modal set to null');
+  handleModalHidden() {
+    this.removeBackdrop()
   }
 
   updateSongsCount() {
