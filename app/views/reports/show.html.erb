@@ -1,56 +1,51 @@
-<h1><%= @report.concert_name %></h1>
+<div class="report-details">
+  <h1>コンサートレポート</h1>
 
-<h2>曲リスト</h2>
-<ul id="song-list">
-  <% @report.songs.each do |song| %>
-    <li><%= song.name %> - <%= song.artist %></li>
-  <% end %>
-</ul>
+  <div class="form-group">
+    <h3>コンサート名（イベント名）</h3>
+    <p><%= @report.concert&.name %></p>
+  </div>
 
-<button id="add-song-btn" class="btn btn-primary">曲を追加</button>
-<button id="save-songs-btn" class="btn btn-success">保存</button>
+  <div class="form-group">
+    <h3>コンサート日時（開演時間）</h3>
+    <p><%= l(@report.concert&.date, format: :long) if @report.concert&.date %></p>
+  </div>
 
-<%= render 'add_song_modal' %>
+  <div class="form-group">
+    <h3>アーティスト名（団体名）</h3>
+    <p><%= @report.concert&.artist %></p>
+  </div>
 
-<script>
-  document.addEventListener('turbolinks:load', () => {
-    const addSongBtn = document.getElementById('add-song-btn');
-    const saveSongsBtn = document.getElementById('save-songs-btn');
-    const modal = document.getElementById('addSongModal');
-    const songList = document.getElementById('song-list');
+  <div class="form-group">
+    <h3>コンサート全体の感想など</h3>
+    <p><%= @report.report_body&.body %></p>
+  </div>
 
-    addSongBtn.addEventListener('click', () => {
-      $(modal).modal('show');
-    });
+  <div class="form-group">
+    <h3>セットリストと曲ごとの感想</h3>
+    <div class="song-list-container"> <!-- 新しいコンテナを追加 -->
+      <div class="song-list-group">
+        <% if @existing_set_list_orders.present? %>
+          <div id="songs-count" class="mb-3">
+            曲数: <%= @existing_set_list_orders.count %>
+          </div>
 
-    document.getElementById('add-song-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      fetch('<%= add_temp_song_report_path(@report) %>', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        songList.innerHTML = data.map(song => `<li>${song.name} - ${song.artist}</li>`).join('');
-        $(modal).modal('hide');
-        e.target.reset();
-      });
-    });
+          <%= turbo_frame_tag "songs-list" do %>
+            <div class="songs-wrapper"> <!-- 曲リストのラッパーを追加 -->
+              <% @existing_set_list_orders.each do |set_list_order| %>
+                <%= render 'songs/song', set_list_order: set_list_order %>
+              <% end %>
+            </div>
+          <% end %>
+        <% else %>
+          <p>セットリストはありません</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
 
-    saveSongsBtn.addEventListener('click', () => {
-      fetch('<%= save_songs_report_path(@report) %>', {
-        method: 'POST',
-        headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-        }
-      })
-      .then(() => {
-        window.location.reload();
-      });
-    });
-  });
-</script>
+<div class="actions mt-3">
+  <%= link_to '編集', edit_report_path(@report), class: 'btn btn-primary' %>
+  <%= link_to '戻る', reports_path, class: 'btn btn-secondary' %>
+</div>

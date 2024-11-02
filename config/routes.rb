@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users
+  root 'reports#index'
   resources :set_list_orders, only: [:create, :update, :destroy]
   resources :user_favorites, only: [:create, :destroy]
   resources :sections, only: [:create, :update, :destroy]
@@ -7,8 +8,15 @@ Rails.application.routes.draw do
   resources :report_favorites, only: [:create, :destroy]
   resources :reports do
     resources :sections do
-      resources :set_list_orders
+      resources :set_list_orders do
+        member do
+          patch :update_position
+          get :edit
+        end
+      end
+      patch 'update_song_order', on: :member
     end
+    post 'create_new', on: :collection
     member do
       get 'add_song'
       post 'add_song'

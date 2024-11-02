@@ -1,7 +1,45 @@
 <% if local_assigns[:set_list_order].present? && set_list_order.song.present? %>
-  <div class="song-item" data-song-id="<%= set_list_order.song.id %>" data-order="<%= set_list_order.order || set_list_order.created_at.to_i %>">
-    <h5><%= set_list_order.order ? "#{set_list_order.order}. " : "" %><%= set_list_order.song.name %> - <%= set_list_order.song.artist %></h5>
-    <p><%= set_list_order.body %></p>
+<div class="song-item" 
+     id="song-<%= set_list_order.id %>" 
+     data-id="<%= set_list_order.id %>"
+     data-section-id="<%= set_list_order.section.id %>">
+    <div class="song-details">
+      <h6><%= set_list_order.song.name %></h6>
+      <p><%= set_list_order.song.artist %></p>
+      <% if set_list_order.body.present? %>
+        <p class="song-comment"><%= set_list_order.body %></p>
+      <% end %>
+    </div>
+    
+    <div class="song-actions">
+      <%= link_to '#', 
+          class: "song_button", 
+          title: "編集",
+          data: {
+            action: "click->report#openEditModal",
+            set_list_order_id: set_list_order.id,
+            report_id: set_list_order.section.report.id,
+            section_id: set_list_order.section.id
+          } do %>
+        <i class="fas fa-edit"></i>
+      <% end %>
+      <%= link_to report_section_set_list_order_path(
+            set_list_order.section.report,
+            set_list_order.section,
+            set_list_order
+          ), 
+          data: { 
+            turbo_method: :delete,
+            turbo_confirm: '本当に削除しますか？'
+          },
+          class: "delete-link", 
+          title: "削除" do %>
+        <i class="fas fa-trash-alt"></i>
+      <% end %>
+      <span class="song_button handle" title="移動">
+        <i class="fas fa-arrows-alt"></i>
+      </span>
+    </div>
   </div>
 <% else %>
   <p>曲情報が利用できません</p>

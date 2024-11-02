@@ -7,13 +7,17 @@ class Report < ApplicationRecord
   has_many :songs, through: :set_list_orders
   has_many :report_favorites, dependent: :destroy
   has_many :favorited_by_users, through: :report_favorites, source: :user
+  after_create :create_default_section
 
-  enum report_status: { published: 0, unpublished: 1, draft: 2 }
+  enum :report_status, { published: 0, unpublished: 1, draft: 2, discarded: 3 }
 
   accepts_nested_attributes_for :report_body, allow_destroy: true
+  accepts_nested_attributes_for :concert, allow_destroy: true
   accepts_nested_attributes_for :sections, allow_destroy: true
   accepts_nested_attributes_for :songs, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :set_list_orders, allow_destroy: true
+
+  attr_accessor :concert_name, :concert_date, :artist_name, :impression
 
   # バリデーション
   validates :report_status, presence: true
@@ -45,5 +49,11 @@ class Report < ApplicationRecord
   # レポートを初期化するメソッド
   def self.initialize_for_user(user)
     user.reports.create(report_status: :draft)
+  end
+
+  private
+
+  def create_default_section
+    sections.create!(name: "セットリスト", order: 1)
   end
 end

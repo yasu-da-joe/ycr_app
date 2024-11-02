@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_03_101245) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_31_055435) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -65,7 +65,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_03_101245) do
   create_table "set_list_orders", force: :cascade do |t|
     t.bigint "section_id", null: false
     t.bigint "song_id", null: false
-    t.integer "order"
+    t.integer "position"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

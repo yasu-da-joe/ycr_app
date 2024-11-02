@@ -176,6 +176,72 @@ h1{
 }
 /* フォーム関連以上 */
 
+/* 曲一覧以下 */
+.song-list-group{
+  width: 326px;
+  margin: 0 auto 20px auto;
+  background-color: #fff;
+  border: solid 1px #C5705D;
+}
+.song-item{
+  display: flex;
+  justify-content: space-between;
+  background-color: #F8EDE3;
+  border: solid 1px #C5705D;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px auto;
+  align-items: center;
+  width: 90%;
+}
+
+.song-info{
+  color: #C5705D;
+}
+
+.song-info h5{
+  margin: 0;
+  max-width: 205px;
+}
+
+.song-actions a{
+  color: #333;
+  text-decoration: none;
+  margin: 5px;
+}
+/* 曲一覧以上 */
+
+/* 曲入れ替え用 */
+
+.song-item {
+  cursor: default;  /* デフォルトのカーソルはそのまま */
+}
+
+.handle {
+  cursor: move;  /* 移動アイコンの上だけカーソルを変更 */
+}
+
+.sortable-ghost {
+  opacity: 0.5;
+  background: #f8f9fa;
+  border: 2px dashed #ccc;
+}
+
+.sortable-chosen {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ドラッグ中は編集・削除ボタンを非表示にする */
+.sortable-chosen .song-actions a {
+  visibility: hidden;
+}
+
+.sortable-chosen .handle {
+  visibility: visible;
+}
+/* 曲入れ替え用以上 */
+
 .head-text{
   color: #C5705D;
   width: 80%;

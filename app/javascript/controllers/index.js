@@ -9,3 +9,6 @@ application.register("hello", HelloController)
 
 import ReportController from "./report_controller"
 application.register("report", ReportController)
+
+import SortableController from "./sortable_controller"
+application.register("sortable", SortableController)

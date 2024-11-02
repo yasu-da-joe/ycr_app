@@ -1,5 +1,12 @@
 <h1>コンサートレポートを書く</h1>
-
+<div class="mb-4">
+  <%= button_to '新規レポートを作成', create_new_reports_path,
+    class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded',
+    data: { 
+      turbo_method: :post 
+    }
+  %>
+</div>
 <%= form_with(model: @report, local: false, data: { controller: 'report', report_target: 'form', report_id: @report.persisted? ? @report.id : nil }) do |form| %>
   <div class="form-group">
     <%= form.label :concert_name, 'コンサート名（イベント名）', class: 'required' %>
@@ -22,24 +29,34 @@
   </div>
 
   <div class="form-group">
-    <h3>既存の曲リスト</h3>
-    <div id="songs-count">
-      曲数: <%= @existing_set_list_orders.count %>
-    </div>
+    <%= form.label :set_list_order, 'セットリストと曲ごとの感想' %>
+    <div class="song-list-group">
+      <div id="songs-count">
+        曲数: <%= @existing_set_list_orders.count %>
+      </div>
 
-    <%= turbo_frame_tag "songs-list" do %>
-      <% @existing_set_list_orders.each do |set_list_order| %>
-        <%= render 'songs/song', set_list_order: set_list_order %>
+      <%= turbo_frame_tag "songs-list" do %>
+        <% if @existing_set_list_orders.present? %>
+          <div class="songs-container" 
+               data-controller="sortable"
+               data-section-id="<%= @section.id %>"
+               data-report-id="<%= @report.id %>">
+            <div class="section-songs" data-section-id="<%= @section.id %>">
+                <% @existing_set_list_orders.sort_by(&:position).each do |set_list_order| %>
+                <%= render 'songs/song', set_list_order: set_list_order %>
+                <% end %>
+            </div>
+          </div>
+        <% end %>
       <% end %>
-    <% end %>
-
-    <div id="flash-messages"></div>
-
-    <%= link_to '曲を追加', '#', class: 'btn btn-secondary', data: { action: 'click->report#addSong' } %>
+    </div>
   </div>
 
-  <%= form.submit '下書き保存', name: 'draft', class: 'btn btn-info', data: { action: 'click->report#saveDraft' } %>
-  <%= form.submit 'レポート保存', name: 'publish', class: 'btn btn-primary', data: { action: 'click->report#publish' } %>
+<div class="mt-4 space-x-2">
+  <%= link_to '曲を追加', '#', class: 'btn btn-secondary', data: { action: 'click->report#addSong' } %>
+  <%= button_tag '下書き保存', type: 'button', class: 'btn btn-info', data: { action: 'click->report#saveDraft' } %>
+  <%= button_tag 'レポート保存', type: 'button', class: 'btn btn-primary', data: { action: 'click->report#publish' } %>
+</div>
 <% end %>
 
 <div id="song-modal" class="modal fade" tabindex="-1" role="dialog">
@@ -49,3 +66,4 @@
     </div>
   </div>
 </div>
+<div id="flash-messages"></div>
