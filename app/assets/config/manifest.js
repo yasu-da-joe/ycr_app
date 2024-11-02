@@ -1,4 +1,5 @@
 //= link_tree ../images
 //= link_tree ../../javascript .js
-//= link application.css
 //= link custom.css
+//= link song.js
+//= link_tree ../stylesheets .css

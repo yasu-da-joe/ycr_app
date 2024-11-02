@@ -1,11 +1,28 @@
 Rails.application.routes.draw do
+  devise_for :users
+  root 'reports#index'
   resources :set_list_orders, only: [:create, :update, :destroy]
-  resources :songs
   resources :user_favorites, only: [:create, :destroy]
   resources :sections, only: [:create, :update, :destroy]
   resources :report_bodies, only: [:create, :update]
   resources :report_favorites, only: [:create, :destroy]
-  resources :reports
+  resources :reports do
+    resources :sections do
+      resources :set_list_orders do
+        member do
+          patch :update_position
+          get :edit
+        end
+      end
+      patch 'update_song_order', on: :member
+    end
+    post 'create_new', on: :collection
+    member do
+      get 'add_song'
+      post 'add_song'
+    end
+  end
+  resources :songs, only: [:new, :create]
   resources :users
   resources :concerts
   get 'search/index'

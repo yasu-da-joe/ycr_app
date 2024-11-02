@@ -1,0 +1,74 @@
+<%= form_with(
+  model: [@report, @section, @set_list_order],
+  url: if @set_list_order.new_record?
+        report_section_set_list_orders_path(@report, @section)
+      else
+        report_section_set_list_order_path(@report, @section, @set_list_order)
+      end,
+  method: @set_list_order.new_record? ? :post : :patch,
+  data: { 
+    action: "submit->report#submitSong",
+    turbo: false,
+    current_page: controller_name == 'reports' ? action_name : nil  # 現在のページ情報を追加
+  },
+  local: false,
+  fotmat: :json,
+  html: { id: 'songForm' }
+) do |form| %>
+  <div class="error-messages"></div>
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <%= @set_list_order.new_record? ? '曲を追加' : '曲を編集' %>
+    </h5>
+    <button type="button" 
+      class="btn-close" 
+      data-bs-dismiss="modal" 
+      data-action="click->report#closeModal" 
+      aria-label="Close">
+    </button>
+  </div>
+<div class="modal-body">
+  <%= form.fields_for :song, @set_list_order.song || @set_list_order.build_song do |song_form| %>
+    <div class="form-group">
+      <%= song_form.label :name, '曲名' %>
+      <%= song_form.text_field :name,
+          class: "form-control #{'is-invalid' if @set_list_order.song&.errors&.include?(:name)}",
+          value: @set_list_order.song&.name %>
+      <% if @set_list_order.song&.errors&.include?(:name) %>
+        <div class="invalid-feedback"><%= @set_list_order.song.errors[:name].join(', ') %></div>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <%= song_form.label :artist, 'アーティスト' %>
+      <%= song_form.text_field :artist,
+          class: "form-control #{'is-invalid' if @set_list_order.song&.errors&.include?(:artist)}",
+          value: @set_list_order.song&.artist %>
+      <% if @set_list_order.song&.errors&.include?(:artist) %>
+        <div class="invalid-feedback"><%= @set_list_order.song.errors[:artist].join(', ') %></div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :body, '感想' %>
+    <%= form.text_area :body,
+        class: 'form-control',
+        value: @set_list_order.body %>
+  </div>
+</div>
+  <div class="modal-footer">
+    <button type="button" 
+      class="btn btn-secondary" 
+      data-bs-dismiss="modal"
+      data-action="click->report#closeModal">
+      閉じる
+    </button>
+    <%= form.submit @set_list_order.new_record? ? '追加' : '更新', 
+        class: 'btn btn-primary',
+        data: { 
+          disable_with: '送信中...'
+        } 
+    %>
+  </div>
+<% end %>

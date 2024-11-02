@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_22_103345) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_31_055435) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,7 +43,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_22_103345) do
 
   create_table "reports", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.bigint "concert_id", null: false
+    t.bigint "concert_id"
     t.boolean "is_spoiler"
     t.date "spoiler_until"
     t.integer "report_status", default: 0
@@ -65,7 +65,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_22_103345) do
   create_table "set_list_orders", force: :cascade do |t|
     t.bigint "section_id", null: false
     t.bigint "song_id", null: false
-    t.integer "order"
+    t.integer "position"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -109,7 +109,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_22_103345) do
     t.datetime "updated_at", null: false
     t.string "crypted_password"
     t.string "salt"
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "report_bodies", "reports"

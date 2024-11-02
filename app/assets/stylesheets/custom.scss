@@ -1,5 +1,8 @@
-body{
+body {
   background-color: #F8EDE3;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
 }
 
 h1{
@@ -77,7 +80,7 @@ h1{
 /* ヘッダ関連 */
 .site-header {
   background-color: #F8EDE3;
-  height: 54px;
+  height: 65px;
   display: flex;
   align-items: center;
 }
@@ -142,12 +145,26 @@ h1{
   color: #C5705D;
 }
 
+.login_field{
+  text-align: center;
+  color: #C5705D;
+}
+
 .form-group input{
   border: 1px solid #C5705D;
   border-radius:8px;
   width: 300px;
   margin-bottom: 10px;
   height: 2.5em;
+}
+
+.form-group textarea{
+  border: 1px solid #C5705D;
+  border-radius:8px;
+  width: 300px;
+  margin-bottom: 10px;
+  height: 5em;
+  resize: vertical;
 }
 
 .submit-button{
@@ -158,6 +175,78 @@ h1{
   margin-top: 24px;
 }
 /* フォーム関連以上 */
+
+/* 曲一覧以下 */
+.song-list-group{
+  width: 326px;
+  margin: 0 auto 20px auto;
+  background-color: #fff;
+  border: solid 1px #C5705D;
+}
+.song-item{
+  display: flex;
+  justify-content: space-between;
+  background-color: #F8EDE3;
+  border: solid 1px #C5705D;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px auto;
+  align-items: center;
+  width: 90%;
+}
+
+.song-info{
+  color: #C5705D;
+}
+
+.song-info h5{
+  margin: 0;
+  max-width: 205px;
+}
+
+.song-actions a{
+  color: #333;
+  text-decoration: none;
+  margin: 5px;
+}
+/* 曲一覧以上 */
+
+/* 曲入れ替え用 */
+
+.song-item {
+  cursor: default;  /* デフォルトのカーソルはそのまま */
+}
+
+.handle {
+  cursor: move;  /* 移動アイコンの上だけカーソルを変更 */
+}
+
+.sortable-ghost {
+  opacity: 0.5;
+  background: #f8f9fa;
+  border: 2px dashed #ccc;
+}
+
+.sortable-chosen {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ドラッグ中は編集・削除ボタンを非表示にする */
+.sortable-chosen .song-actions a {
+  visibility: hidden;
+}
+
+.sortable-chosen .handle {
+  visibility: visible;
+}
+/* 曲入れ替え用以上 */
+
+.head-text{
+  color: #C5705D;
+  width: 80%;
+  margin: auto;
+}
 
 /* フッター関連 */
 .site-footer {
@@ -198,3 +287,9 @@ h1{
   margin: 0;
 }
 /* フッター関連以上 */
+
+*,
+*::before,
+*::after {
+  box-sizing: content-box;
+}

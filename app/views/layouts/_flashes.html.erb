@@ -1,0 +1,16 @@
+<% if flash.any? %>
+  <div id="flash-messages">
+    <% flash.each do |key, value| %>
+      <div class="alert alert-<%= bootstrap_alert(key) %>">
+        <strong>
+          <%= value %>
+        </strong>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+<script>
+  $(function() {
+    setTimeout("$('.flash').fadeOut('slow')", 2000);
+  });
+</script>
