@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+export function initializeSearch() {
   const artistInput = document.getElementById("artist-search");
   const trackInput = document.getElementById("track-search");
   const artistSuggestionsDiv = document.getElementById("artist-suggestions");
@@ -60,13 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
           `;
           artistSuggestionsDiv.appendChild(div);
         });
-
-        // 選択ボタンにイベントリスナーを追加
+  
         document.querySelectorAll('.select-artist').forEach(button => {
           button.addEventListener('click', selectArtist);
         });
-      })
-      .catch((error) => console.error("Error:", error));
+      });
   }
 
   function selectArtist(e) {
@@ -74,8 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const artistName = e.target.dataset.name;
     selectedArtistId = artistId;
     selectedArtistName = artistName;
-    selectedArtistDiv.textContent = `選択されたアーティスト: ${artistName}`;
-    artistInput.value = "";
+  
+    // メインのフォームフィールドに値を設定
+    document.querySelector('input[name="set_list_order[song_attributes][artist]"]').value = artistName;
+  
+    // サジェスト関連の処理
     artistSuggestionsDiv.innerHTML = "";
     trackSearchContainer.style.display = "block";
     trackInput.focus();
@@ -136,4 +137,4 @@ document.addEventListener("DOMContentLoaded", () => {
       <p>リリース日: ${track.release_date}</p>
     `;
   }
-});
+}

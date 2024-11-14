@@ -22,6 +22,10 @@ Rails.application.routes.draw do
       post 'add_song'
     end
   end
+  namespace :search do
+    get 'suggest_artists'
+    get 'suggest_tracks'
+  end
   resources :songs, only: [:new, :create]
   resources :users
   resources :concerts

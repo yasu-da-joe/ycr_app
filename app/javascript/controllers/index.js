@@ -12,3 +12,12 @@ application.register("report", ReportController)
 
 import SortableController from "./sortable_controller"
 application.register("sortable", SortableController)
+
+import { initializeSearch } from "./search"
+document.addEventListener('turbo:load', () => {
+    document.addEventListener('shown.bs.modal', (event) => {
+      if (event.target.querySelector('#artist-search')) {
+        initializeSearch()
+      }
+    })
+})
