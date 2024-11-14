@@ -1,3 +1,4 @@
-<h1>マイページ</h1>
-<p>users#mypage</p>
+<div class="container">
+  <h1>マイページ</h1>
+    <%= button_to 'マイレポート', myreports_path, method: :get %>
     <%= button_to 'ログアウト', logout_path, method: :delete, class: 'btn btn-outline-danger' %>

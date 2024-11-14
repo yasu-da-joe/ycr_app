@@ -297,46 +297,6 @@ export default class extends Controller {
     }
   }
 
-  async saveDraft(event) {
-    event.preventDefault()
-    await this.saveReport('draft')
-  }
-
-  async publish(event) {
-    event.preventDefault()
-    await this.saveReport('publish')
-  }
-
-  async saveReport(action) {
-    const formData = new FormData(this.formTarget)
-    formData.append(action, true)  // draftまたはpublishパラメータを追加
-  
-    try {
-      const response = await fetch(this.formTarget.action, {
-        method: this.formTarget.method,  // フォームのmethodをそのまま使用（PATCHになる）
-        body: formData,
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'Accept': 'application/json'
-        }
-      })
-  
-      const result = await response.json()
-      
-      if (result.success) {
-        if (result.redirect_url) {
-          window.location.href = result.redirect_url
-        }
-      } else {
-        console.error('Failed to save report:', result.errors)
-        this.showFlashMessage(result.errors?.join(', ') || 'レポートの保存に失敗しました', 'error')
-      }
-    } catch (error) {
-      console.error('Error saving report:', error)
-      this.showFlashMessage('エラーが発生しました', 'error')
-    }
-  }
-
   removeSong(event) {
     const songItem = event.target.closest('.song-item')
     if (songItem) {

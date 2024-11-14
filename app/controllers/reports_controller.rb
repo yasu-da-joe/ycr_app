@@ -1,6 +1,6 @@
 class ReportsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_report, only: [:create, :update, :add_song]
+  before_action :set_report, only: [:update, :add_song]
   before_action :set_report_for_edit, only: [:edit]
 
   def new
@@ -11,28 +11,28 @@ class ReportsController < ApplicationController
                              .order(created_at: :desc)
                              .first
 
-  if params[:new]
-    @report = latest_report
-  else
-    @report = latest_report || current_user.reports.build(report_status: :draft)
+    if params[:new]
+      @report = latest_report
+    else
+      @report = latest_report || current_user.reports.build(report_status: :draft)
+    end
+
+    if @report&.persisted?
+      @report.concert_name = @report.concert&.name
+      @report.concert_date = @report.concert&.date
+      @report.artist_name = @report.concert&.artist
+      @report.impression = @report.report_body&.body
+      @section = @report.sections.first_or_create!(name: "セットリスト", order: 1)
+      @existing_set_list_orders = @report.sections.flat_map(&:set_list_orders)
+                                        .sort_by { |o| [o.position || Float::INFINITY, o.created_at] }
+    else
+      @report.sections.build(name: "セットリスト", order: 1) if @report.sections.empty?
+      @section = @report.sections.first
+      @existing_set_list_orders = []
+    end
   end
 
-  if @report&.persisted?
-    @report.concert_name = @report.concert&.name
-    @report.concert_date = @report.concert&.date
-    @report.artist_name = @report.concert&.artist
-    @report.impression = @report.report_body&.body
-    @section = @report.sections.first_or_create!(name: "セットリスト", order: 1)
-    @existing_set_list_orders = @report.sections.flat_map(&:set_list_orders)
-                                      .sort_by { |o| [o.position || Float::INFINITY, o.created_at] }
-  else
-    @report.sections.build(name: "セットリスト", order: 1) if @report.sections.empty?
-    @section = @report.sections.first
-    @existing_set_list_orders = []
-  end
-end
-
-  def create
+  def create  
     @report = current_user.reports.new
 
     if params[:publish]
@@ -58,16 +58,11 @@ end
 
     respond_to do |format|
       if @report.save
-        format.json { render json: { 
-          success: true, 
-          message: save_message, 
-          redirect_url: report_path(@report) 
-        }}
+        format.html { redirect_to report_path(@report), notice: save_message }
+        format.turbo_stream { redirect_to report_path(@report), notice: save_message }
       else
-        format.json { render json: { 
-          success: false, 
-          errors: @report.errors.full_messages 
-        }, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream { render :new, status: :unprocessable_entity }
       end
     end
   end
@@ -92,21 +87,19 @@ end
     @report.concert = concert
 
     # 感想の保存
-    @report.build_report_body unless @report.report_body
-    @report.report_body.body = report_params[:impression]
+    if @report.report_body
+      @report.report_body.update(body: report_params[:impression])
+    else
+      @report.create_report_body(body: report_params[:impression])
+    end
 
     respond_to do |format|
       if @report.save
-        format.json { render json: { 
-          success: true, 
-          message: save_message, 
-          redirect_url: report_path(@report) 
-        }}
+        format.html { redirect_to report_path(@report), notice: save_message }
+        format.turbo_stream { redirect_to report_path(@report), notice: save_message }
       else
-        format.json { render json: { 
-          success: false, 
-          errors: @report.errors.full_messages 
-        }, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_entity }
+        format.turbo_stream { render :new, status: :unprocessable_entity }
       end
     end
   end
@@ -207,6 +200,27 @@ end
     render json: { success: true }
   rescue => e
     render json: { error: e.message }, status: :unprocessable_entity
+  end
+
+  def destroy
+    Rails.logger.info "Params: #{params.inspect}"  # パラメータの内容を確認
+    Rails.logger.info "Current User: #{current_user.inspect}"  # ログイン中のユーザー情報
+    
+    begin
+      @report = Report.find(params[:id])
+      Rails.logger.info "Found Report: #{@report.inspect}"  # 見つかったレポートの情報
+      
+      if @report.user_id == current_user.id
+        @report.destroy
+        redirect_to myreports_path, notice: 'レポートを削除しました'
+      else
+        redirect_to myreports_path, alert: '削除権限がありません'
+      end
+    rescue ActiveRecord::RecordNotFound => e
+      Rails.logger.error "Report not found: #{e.message}"  # エラーメッセージを記録
+      Rails.logger.error e.backtrace.join("\n")  # バックトレースも記録
+      redirect_to myreports_path, alert: '指定されたレポートが見つかりません'
+    end
   end
 
   private

@@ -26,6 +26,11 @@ class UsersController < ApplicationController
     @user = current_user
   end
 
+  def myreports
+    @user = current_user
+    @reports = current_user.reports.includes(:concert).order(created_at: :desc)
+  end
+
   private
 
   def user_params

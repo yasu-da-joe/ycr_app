@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   get 'login', to: 'user_sessions#new', as: :login
   post 'login', to: 'user_sessions#create'
   get 'mypage', to: 'users#mypage', as: :mypage
+  get 'myreports', to: 'users#myreports', as: :myreports
   delete 'logout', to: 'user_sessions#destroy', as: :logout
 
   resources :tasks
