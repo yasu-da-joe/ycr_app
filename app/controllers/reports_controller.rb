@@ -212,14 +212,14 @@ class ReportsController < ApplicationController
       
       if @report.user_id == current_user.id
         @report.destroy
-        redirect_to myreports_path, notice: 'レポートを削除しました'
+        redirect_to user_my_reports_path, notice: 'レポートを削除しました'
       else
-        redirect_to myreports_path, alert: '削除権限がありません'
+        redirect_to user_my_reports_path, alert: '削除権限がありません'
       end
     rescue ActiveRecord::RecordNotFound => e
       Rails.logger.error "Report not found: #{e.message}"  # エラーメッセージを記録
       Rails.logger.error e.backtrace.join("\n")  # バックトレースも記録
-      redirect_to myreports_path, alert: '指定されたレポートが見つかりません'
+      redirect_to user_my_reports_path, alert: '指定されたレポートが見つかりません'
     end
   end
 

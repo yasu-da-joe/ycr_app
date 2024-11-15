@@ -1,0 +1,37 @@
+<div class="reports-list">
+  <% if reports.exists? %>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>公演名</th>
+          <th>アーティスト</th>
+          <th>公演日時</th>
+          <th>ユーザー名</th>
+          <th>ステータス</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reports.each do |report| %>
+          <tr>
+            <td><%= report.concert.name %></td>
+            <td><%= report.concert.artist %></td>
+            <td><%= l report.concert.date %></td>
+            <td><%= report.user.name %></td>
+            <td><%= report.report_status %></td>
+            <td>
+              <%= link_to '詳細', report_path(report), class: 'btn btn-primary btn-sm', data: { turbo: false } %>
+              <%= link_to '編集', edit_report_path(report), class: 'btn btn-success btn-sm', data: { turbo: false } %>
+              <%= button_to '削除', report_path(report), 
+                  method: :delete,
+                  data: { turbo_confirm: '本当に削除しますか？' },
+                  class: 'btn btn-danger btn-sm' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>まだレポートの投稿がありません。</p>
+  <% end %>
+</div>

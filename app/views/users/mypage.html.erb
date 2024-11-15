@@ -1,4 +1,12 @@
-<div class="container">
   <h1>マイページ</h1>
-    <%= button_to 'マイレポート', myreports_path, method: :get %>
+  <p class="head-text">キミレポへのご訪問ありがとうございます。</p>
+  <p class="head-text">ここではご自身のレポートの振り返りと編集、プロフィール編集、フォローしたユーザーの管理、確認などができます。キミレポをぜひご活用ください。</p>
+  <div class="mypage-div">
+    <ul class="mypage-ul">
+      <li class="mypage-li"><i class="fa-solid fa-file-lines fa-fw"></i><%= link_to "レポート管理", user_my_reports_path, method: :get %></li>
+      <li class="mypage-li"><i class="fa-solid fa-user-pen fa-fw"></i><%= link_to "プロフィール編集", '#' %></li>
+      <li class="mypage-li"><i class="fa-solid fa-user-check fa-fw"></i><%= link_to "イイネユーザー管理", '#' %></li>
+      <li class="mypage-li"><i class="fa-solid fa-file-circle-check fa-fw"></i><%= link_to "イイネしたレポートを読む", '#' %></li>
+    </ul>
+  </div>
     <%= button_to 'ログアウト', logout_path, method: :delete, class: 'btn btn-outline-danger' %>

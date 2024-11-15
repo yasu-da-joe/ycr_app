@@ -248,6 +248,37 @@ h1{
   margin: auto;
 }
 
+/* マイページ用 */
+.mypage-div{
+  display: flex;
+  justify-content: center;
+}
+
+.mypage-ul{
+  display: inline-block;
+  margin: 30px auto 20px auto;
+  color: #C5705D;
+  padding: 0px;
+}
+
+.mypage-li{
+  list-style: none;
+  margin: 25px auto;
+  font-size: 20px;
+}
+
+.mypage-li i{
+  margin-right: 10px;
+  font-size: 28px;
+}
+
+.mypage-li a{
+  color: #C5705D;
+  text-decoration: none;
+}
+
+/* マイページ以上 */
+
 /* フッター関連 */
 .site-footer {
   background-color: #C5705D;
