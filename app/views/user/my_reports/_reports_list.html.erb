@@ -1,0 +1,43 @@
+<div class="report-design">
+<% if reports.exists? %>
+	<% reports.each do |report| %>
+      <div class="my-report">
+        <div class="report-display">
+          <div class="report-upper">
+            <div class="report-main">
+              <div class="report-content">
+                <p class="concert-title"><%= report.concert.name %></p>
+                <p class="concert-artist"><%= report.concert.artist %></p>
+                <p class="concert-date"><%= l report.concert.date %></p>
+              </div>
+              <div class="report-edit">
+              <p><%= link_to edit_report_path(report), class: 'report-edit-icon', data: { turbo: false } do%><i class="fa-solid fa-pencil"></i><% end %></p>
+              <p>
+                <%= link_to report_path(report), 
+                    data: { 
+                      turbo_method: :delete,
+                      turbo_confirm: '本当に削除しますか？'
+                    },
+                    class: 'report-edit-icon' do %>
+                  <i class="fa-solid fa-trash"></i>
+                <% end %>
+              </p>
+              </div>
+            </div>
+          </div>
+          <p class="report-body-intro"><%= report.report_body&.body.first(10) %>...</p>
+          <div class="report-bottom">
+            <p class="written-by">by <%= report.user.name %></p>
+            <div class="read-bottom-btn">
+              <%= link_to report_path(report), class: 'btn read-more-btn', data: { turbo: false } do %>
+                続きを読む >
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+<% end %>
+<% else %>
+  <p>まだレポートの投稿がありません。</p>
+<% end %>
+</div>

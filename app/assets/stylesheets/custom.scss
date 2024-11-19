@@ -248,6 +248,127 @@ h1{
   margin: auto;
 }
 
+/* マイページ用 */
+.mypage-div{
+  display: flex;
+  justify-content: center;
+}
+
+.mypage-ul{
+  display: inline-block;
+  margin: 30px auto 20px auto;
+  color: #C5705D;
+  padding: 0px;
+}
+
+.mypage-li{
+  list-style: none;
+  margin: 25px auto;
+  font-size: 20px;
+}
+
+.mypage-li i{
+  margin-right: 10px;
+  font-size: 28px;
+}
+
+.mypage-li a{
+  color: #C5705D;
+  text-decoration: none;
+}
+
+/* マイページ以上 */
+
+/* レポート管理 */
+.my-report-btn{
+  display: flex;
+  justify-content: center;
+}
+
+.report-btn-primary{
+  background-color: #C5705D; 
+  color: #F8EDE3;
+  margin: 20px;
+  padding: 5px 40px;
+}
+
+.report-btn-outline-primary{
+  border-color: #C5705D;
+  color:#C5705D;
+  margin: 20px;
+  padding: 5px 40px;
+}
+
+.report-design{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 300px));
+  gap: 15px;
+  justify-content: center;
+}
+
+.report-display{
+  width: 300px;
+  background-color: #D0B8A8;
+  color: #F8EDE3;
+}
+
+.report-main{
+  display: flex;
+  justify-content: space-between;
+}
+
+.report-content{
+  margin: 10px 0 0 10px;
+}
+.concert-title{
+  font-size: 20px;
+}
+
+.concert-title{
+  margin-bottom: 0px;
+}
+.concert-artist{
+  font-size: 14px;
+  margin-bottom: 0px;
+}
+
+.concert-date{
+  font-size: 14px;
+  margin-bottom: 0px;
+}
+
+.report-body-intro{
+  font-size: 16px;
+  margin: 0 0 5px 10px;
+}
+
+.report-edit{
+  margin: 20px 15px 0 0;
+}
+
+.report-edit-icon{
+  color: #333;
+  line-height: 0.5;
+}
+
+.report-bottom{
+  display: flex;
+  justify-content: space-between;
+}
+
+.written-by{
+  font-size: 12px;
+  margin: 0 0 0 12px;
+}
+
+.read-more-btn{
+ background-color: #C5705D; 
+ color: #F8EDE3;
+ margin: 0 10px 10px 0;
+}
+
+/* レポート管理以上 */
+
 /* フッター関連 */
 .site-footer {
   background-color: #C5705D;

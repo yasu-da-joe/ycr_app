@@ -1,0 +1,13 @@
+<h1>レポート管理</h1>
+<div class="my-report-btn" role="group">
+    <%= link_to '公開済', user_my_reports_path(status: 'published'), 
+        class: "btn #{params[:status] == 'published' || params[:status].nil? ? 'report-btn-primary' : 'report-btn-outline-primary'}",
+        data: { turbo_frame: "reports-list" } %>
+    <%= link_to '下書き', user_my_reports_path(status: 'draft'), 
+        class: "btn #{params[:status] == 'draft' ? 'report-btn-primary' : 'report-btn-outline-primary'}",
+        data: { turbo_frame: "reports-list" } %>
+  </div>
+
+  <%= turbo_frame_tag "reports-list" do %>
+    <%= render "reports_list", reports: @reports %>
+  <% end %>

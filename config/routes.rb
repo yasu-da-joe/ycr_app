@@ -28,6 +28,13 @@ Rails.application.routes.draw do
   end
   resources :songs, only: [:new, :create]
   resources :users
+  namespace :user do
+    resources :my_reports do
+      member do
+        patch :toggle_status
+      end
+    end
+  end
   resources :concerts
   get 'search/index'
   get 'login', to: 'user_sessions#new', as: :login
