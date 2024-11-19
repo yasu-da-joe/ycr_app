@@ -1,37 +1,43 @@
-<div class="reports-list">
-  <% if reports.exists? %>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>公演名</th>
-          <th>アーティスト</th>
-          <th>公演日時</th>
-          <th>ユーザー名</th>
-          <th>ステータス</th>
-          <th>操作</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% reports.each do |report| %>
-          <tr>
-            <td><%= report.concert.name %></td>
-            <td><%= report.concert.artist %></td>
-            <td><%= l report.concert.date %></td>
-            <td><%= report.user.name %></td>
-            <td><%= report.report_status %></td>
-            <td>
-              <%= link_to '詳細', report_path(report), class: 'btn btn-primary btn-sm', data: { turbo: false } %>
-              <%= link_to '編集', edit_report_path(report), class: 'btn btn-success btn-sm', data: { turbo: false } %>
-              <%= button_to '削除', report_path(report), 
-                  method: :delete,
-                  data: { turbo_confirm: '本当に削除しますか？' },
-                  class: 'btn btn-danger btn-sm' %>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% else %>
-    <p>まだレポートの投稿がありません。</p>
-  <% end %>
+<div class="report-design">
+<% if reports.exists? %>
+	<% reports.each do |report| %>
+      <div class="my-report">
+        <div class="report-display">
+          <div class="report-upper">
+            <div class="report-main">
+              <div class="report-content">
+                <p class="concert-title"><%= report.concert.name %></p>
+                <p class="concert-artist"><%= report.concert.artist %></p>
+                <p class="concert-date"><%= l report.concert.date %></p>
+              </div>
+              <div class="report-edit">
+              <p><%= link_to edit_report_path(report), class: 'report-edit-icon', data: { turbo: false } do%><i class="fa-solid fa-pencil"></i><% end %></p>
+              <p>
+                <%= link_to report_path(report), 
+                    data: { 
+                      turbo_method: :delete,
+                      turbo_confirm: '本当に削除しますか？'
+                    },
+                    class: 'report-edit-icon' do %>
+                  <i class="fa-solid fa-trash"></i>
+                <% end %>
+              </p>
+              </div>
+            </div>
+          </div>
+          <p class="report-body-intro"><%= report.report_body&.body.first(10) %>...</p>
+          <div class="report-bottom">
+            <p class="written-by">by <%= report.user.name %></p>
+            <div class="read-bottom-btn">
+              <%= link_to report_path(report), class: 'btn read-more-btn', data: { turbo: false } do %>
+                続きを読む >
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+<% end %>
+<% else %>
+  <p>まだレポートの投稿がありません。</p>
+<% end %>
 </div>

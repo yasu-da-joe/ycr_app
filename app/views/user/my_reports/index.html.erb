@@ -1,9 +1,10 @@
-<div class="btn-group mb-3" role="group">
+<h1>レポート管理</h1>
+<div class="my-report-btn" role="group">
     <%= link_to '公開済', user_my_reports_path(status: 'published'), 
-        class: "btn #{params[:status] == 'published' || params[:status].nil? ? 'btn-primary' : 'btn-outline-primary'}",
+        class: "btn #{params[:status] == 'published' || params[:status].nil? ? 'report-btn-primary' : 'report-btn-outline-primary'}",
         data: { turbo_frame: "reports-list" } %>
     <%= link_to '下書き', user_my_reports_path(status: 'draft'), 
-        class: "btn #{params[:status] == 'draft' ? 'btn-primary' : 'btn-outline-primary'}",
+        class: "btn #{params[:status] == 'draft' ? 'report-btn-primary' : 'report-btn-outline-primary'}",
         data: { turbo_frame: "reports-list" } %>
   </div>
 
