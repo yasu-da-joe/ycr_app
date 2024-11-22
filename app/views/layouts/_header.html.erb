@@ -8,14 +8,16 @@
     </div>
     
     <div class="logo">
-      <%= image_tag 'kimirepo_logo.webp', alt: 'キミレポロゴ' %>
+      <%= link_to root_path do %>
+        <%= image_tag 'kimirepo_logo.webp', alt: 'キミレポロゴ' %>
+      <% end %>
     </div>
     
     <div class="user-action">
       <% if user_signed_in? %>
         <%= link_to 'マイページ', mypage_path, class: 'btn-mypage' %>
       <% else %>
-        <%= link_to 'ログイン', login_path, class: 'btn-login' %>
+        <%= link_to 'ログイン', new_user_session_path, class: 'btn-login' %>
       <% end %>
     </div>
   </div>

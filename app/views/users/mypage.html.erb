@@ -9,4 +9,4 @@
       <li class="mypage-li"><i class="fa-solid fa-file-circle-check fa-fw"></i><%= link_to "イイネしたレポートを読む", '#' %></li>
     </ul>
   </div>
-    <%= button_to 'ログアウト', logout_path, method: :delete, class: 'btn btn-outline-danger' %>
+    <%= button_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'btn btn-outline-danger' %>

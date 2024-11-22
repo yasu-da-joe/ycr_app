@@ -1,6 +1,12 @@
 <h1>コンサートレポートを編集</h1>
 
-  <%= form_with(model: @report, local: true) do |form| %>
+<%= form_with(model: @report, local: true, 
+    data: { 
+      controller: "report",  # この属性が正しく設定されているか
+      report_target: "form"  # この属性が正しく設定されているか
+      report_form_id_value: @report.id  # valueとして設定
+    }) do |form| %>
+
   <div class="form-group">
     <%= form.label :concert_name, 'コンサート名（イベント名）', class: 'required' %>
     <%= form.text_field :concert_name, class: 'form-control' %>
@@ -49,7 +55,8 @@
   </div>
 <% end %>
 
-<div id="song-modal" class="modal fade" tabindex="-1" role="dialog">
+<div id="song-modal" class="modal fade" tabindex="-1" role="dialog"
+     data-report-debug="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <!-- モーダルの内容はAjaxで読み込まれます -->

@@ -37,10 +37,7 @@ Rails.application.routes.draw do
   end
   resources :concerts
   get 'search/index'
-  get 'login', to: 'user_sessions#new', as: :login
-  post 'login', to: 'user_sessions#create'
   get 'mypage', to: 'users#mypage', as: :mypage
-  delete 'logout', to: 'user_sessions#destroy', as: :logout
 
   resources :tasks
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

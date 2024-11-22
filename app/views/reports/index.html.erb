@@ -1,5 +1,15 @@
-<h1>トップ画面</h1>
-
+<h1>キミのコンサートレポートが読みたい</h1>
+<p class="head-text">本サイトを使うと、簡単にコンサートレポートを書くことができます。</p>
+<p class="head-text">自分の行ったコンサート・ライブ・フェスの思い出を、写真と感想をつけて残すことができます。</p>
+<p class="head-text">みんなで思い出を共有しましょう！</p>
+<%= link_to new_report_path, class: 'btn large-btn', data: { turbo: false } do %>
+  コンサート・レポートを書く
+<% end %>
+<p class="small-text top-create-btn">コンサートレポートの作成にはログインが必要です</p>
+<p class="top-recent-report">―　最新のコンサートレポート　―</p>
+<%= turbo_frame_tag "reports-list" do %>
+  <%= render "reports_list", reports: @reports %>
+<% end %>
 <div>
   <%= link_to '新規ユーザー登録', new_user_registration_path %>
   <br>

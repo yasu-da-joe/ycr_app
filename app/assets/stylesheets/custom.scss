@@ -133,6 +133,35 @@ h1{
 }
 /* ヘッダ関連以上 */
 
+/* トップページ関連 */
+.large-btn{
+  background-color: #C5705D;
+  color: #F8EDE3;
+  display: block;
+  width: fit-content;
+  margin: 20px auto 5px auto;
+  padding: 15px 30px;
+  border-radius: 30px;
+}
+
+.small-text{
+  font-size: 12px;
+  color: #C5705D;
+}
+
+.top-create-btn{
+  text-align: center;
+}
+
+.top-recent-report{
+  font-size: 20px;
+  text-align: center;
+  color: #C5705D;
+}
+
+
+/* トップページ関連以上 */
+
 /* フォーム関連 */
 .form-group{
   width:300px;
@@ -173,6 +202,16 @@ h1{
   background-color: #C5705D;
   color: #F8EDE3;
   margin-top: 24px;
+}
+
+.go-to-link {
+  font-size: 12px;
+  text-align: center;
+}
+
+.go-to-link a{
+  text-decoration: none;
+  color: #C5705D;
 }
 /* フォーム関連以上 */
 

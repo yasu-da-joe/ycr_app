@@ -1,5 +1,5 @@
 class SetListOrdersController < ApplicationController
-  before_action :require_login
+  before_action :authenticate_user!
   before_action :set_report_and_section
   before_action :set_set_list_order, only: [:edit, :update, :destroy, :update_position]
 
