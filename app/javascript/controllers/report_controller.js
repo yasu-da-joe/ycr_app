@@ -92,9 +92,10 @@ export default class extends Controller {
     
     console.log("Form target in addSong:", this.formTarget);
     console.log("Report ID in addSong:", this.formTarget.dataset.reportId);
+    console.log("Report ID:", this.formTarget.dataset.reportId);  // データセットから直接取得
     
     this.isRequestInProgress = true;
-    const reportId = this.reportFormIdValue;  // valueから取得
+    const reportId = this.formTarget.dataset.reportId || event.currentTarget.dataset.reportId;
     if (!reportId) {
       console.error('Report ID is not available');
       return;

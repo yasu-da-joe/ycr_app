@@ -1,10 +1,19 @@
 <h1>コンサートレポートを編集</h1>
-
+<% if @report.errors.any? %>
+  <div class="error-message", style="color: red;">
+    <h3><%= pluralize(@report.errors.count, "つ") %> の項目が未入力です</h3>
+    <ul>
+      <% @report.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 <%= form_with(model: @report, local: true, 
     data: { 
       controller: "report",  # この属性が正しく設定されているか
-      report_target: "form"  # この属性が正しく設定されているか
-      report_form_id_value: @report.id  # valueとして設定
+      report_target: "form",  # この属性が正しく設定されているか
+      report_id: @report.id
     }) do |form| %>
 
   <div class="form-group">
@@ -63,5 +72,3 @@
     </div>
   </div>
 </div>
-
-<div id="flash-messages"></div>
