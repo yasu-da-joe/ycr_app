@@ -17,6 +17,9 @@ Rails.application.routes.draw do
       patch 'update_song_order', on: :member
     end
     post 'create_new', on: :collection
+    collection do
+      get 'invitation'
+    end  
     member do
       get 'add_song'
       post 'add_song'

@@ -100,24 +100,104 @@ h1{
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 15px;
+  position: relative;
 }
 
-.hamburger-menu {
+.header-flex{
+  width: 100%;
+}
+
+.leftspace{
+  width: 70px;
+}
+
+.hamburger-menu-container {
+  position: relative;
+  z-index: 2;
+  top: -10px;
+}
+
+.checkbox {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  z-index: 3;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.hamburger-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 21px;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 30px;
-  height: 21px;
-  cursor: pointer;
-  padding-right: 50px;
+  padding-left: 15px;
 }
 
-.hamburger-menu span {
+.line {
   display: block;
   height: 3px;
   width: 100%;
   background-color: #C5705D;
+  transition: all 0.3s ease-in-out;
+}
+
+.menu-items {
+  position: fixed;
+  top: 65px;
+  left: 0;
+  width: 230px;
+  height: auto;
+  padding: 20px 0;
+  background: #D0B8A8;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 2;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.menu__item {
+  font-size: 14px;
+  width: 170px;
+  padding: 15px 30px;
+  color: #F8EDE3;
+  transition: background-color 0.3s ease;
+}
+
+.menu__item a {
+  color: #F8EDE3;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+.menu__item:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+/* チェックボックスがチェックされた時のメニュー表示 */
+.checkbox:checked ~ .menu-items {
+  transform: translateX(0);
+}
+
+/* ハンバーガーメニューのアニメーション */
+.checkbox:checked ~ .hamburger-lines .line1 {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.checkbox:checked ~ .hamburger-lines .line2 {
+  opacity: 0;
+}
+
+.checkbox:checked ~ .hamburger-lines .line3 {
+  transform: rotate(-45deg) translate(7px, -7px);
 }
 
 .logo{

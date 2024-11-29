@@ -1,24 +1,49 @@
 <header class="site-header">
-  <div class="header-content">
-    <div class="hamburger-menu">
-      <!-- ハンバーガーメニューのアイコン -->
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    
-    <div class="logo">
-      <%= link_to root_path do %>
-        <%= image_tag 'kimirepo_logo.webp', alt: 'キミレポロゴ' %>
-      <% end %>
-    </div>
-    
-    <div class="user-action">
-      <% if user_signed_in? %>
-        <%= link_to 'マイページ', mypage_path, class: 'btn-mypage' %>
-      <% else %>
-        <%= link_to 'ログイン', new_user_session_path, class: 'btn-login' %>
-      <% end %>
+  <div class="header-flex">
+    <div class="header-content">
+      <div class="hamburger-menu-container">
+        <input class="checkbox" type="checkbox" name="" id="menu-toggle" />
+        <div class="hamburger-lines">
+          <span class="line line1"></span>
+          <span class="line line2"></span>
+          <span class="line line3"></span>
+        </div>  
+      <div class="leftspace">
+      </div>
+        <div class="menu-items">
+          <div class="menu__item">本サイトの使い方</div>
+          <div class="menu__item">コンサートレポートを書く</div>
+          <div class="menu__item">コンサートレポートを読む</div>
+          <div class="menu__item">検索</div>
+          <div class="menu__item">
+            <% if user_signed_in? %>
+              <%= link_to 'マイページ', mypage_path %>
+            <% else %>
+              <%= link_to 'ログイン', new_user_session_path %>
+            <% end %>
+          </div>
+          <div class="menu__item">
+            <% if user_signed_in? %>
+              <%= link_to 'ログアウト', destroy_user_session_path %>
+            <% else %>
+              <%= link_to '新規登録', new_user_registration_path %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="logo">
+        <%= link_to root_path do %>
+          <%= image_tag 'kimirepo_logo.webp', alt: 'キミレポロゴ' %>
+        <% end %>
+      </div>
+      
+      <div class="user-action">
+        <% if user_signed_in? %>
+          <%= link_to 'マイページ', mypage_path, class: 'btn-mypage' %>
+        <% else %>
+          <%= link_to 'ログイン', new_user_session_path, class: 'btn-login' %>
+        <% end %>
+      </div>
     </div>
   </div>
 </header>

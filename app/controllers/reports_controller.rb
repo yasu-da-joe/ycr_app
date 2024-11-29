@@ -238,6 +238,9 @@ class ReportsController < ApplicationController
     end
   end
 
+  def invitation
+  end
+
   private
 
   def report_params

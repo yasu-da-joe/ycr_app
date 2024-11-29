@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
   
   # 基本的に全てのアクションでログインを要求
   before_action :authenticate_user!, unless: :skip_auth?
@@ -23,7 +21,7 @@ class ApplicationController < ActionController::Base
   def authenticate_user!
     if !user_signed_in?
       if reports_controller? && action_name == 'new'
-        redirect_to reports_invitation_path, alert: '投稿するにはログインが必要です'
+        redirect_to invitation_reports_path, alert: '投稿するにはログインが必要です'
         return false
       end
       super
