@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "static_pages/about_us"
+  get "static_pages/terms_of_service"
+  get "static_pages/privacy_policy"
   devise_for :users
   root 'reports#index'
   resources :set_list_orders, only: [:create, :update, :destroy]

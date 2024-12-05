@@ -10,10 +10,3 @@
 <%= turbo_frame_tag "reports-list" do %>
   <%= render "reports_list", reports: @reports %>
 <% end %>
-<div>
-  <%= link_to '新規ユーザー登録', new_user_registration_path %>
-  <br>
-  <%= link_to 'ログイン', new_user_session_path %>
-  <br>
-  <%= link_to '新しいレポートを書く', new_report_path %>
-</div>

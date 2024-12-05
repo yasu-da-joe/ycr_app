@@ -496,29 +496,44 @@ h1{
 
 /* レポート管理以上 */
 
+/* about usページ関連 */
+
+.about_us-h2{
+  padding-top: 20px;
+  padding-bottom: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #C5705D;
+  width: 80%;
+  margin: auto;
+}
+
+/* about usページ以上 */
+
 /* フッター関連 */
 .site-footer {
   background-color: #C5705D;
-  padding: 20px 0;
+  padding: 15px 0;
   margin-top: 30px;
   color: #F8EDE3;
   font-size: 10px;
 }
 
 .footer-content {
-  max-width: 1200px;
+  max-width: 600px;
   margin: 0 auto;
+  text-align: center;  /* 全ての子要素を中央寄せ */
   padding: 0 15px;
+  display: flex;  /* flexboxを使用 */
+  flex-direction: column;  /* 縦方向に並べる */
+  align-items: center;  /* 子要素を横方向中央に配置 */
 }
 
 .footer-menu {
   display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-.footer-menu p {
-  margin: 0 15px;
+  gap: 20px;
+  margin-bottom: 8px;
+  justify-content: center;  /* メニュー項目を中央寄せ */
 }
 
 .footer-menu a {
@@ -531,8 +546,9 @@ h1{
 }
 
 .copyright {
-  text-align: center;
   margin: 0;
+  text-align: center;
+  color: #F8EDE3;
 }
 /* フッター関連以上 */
 

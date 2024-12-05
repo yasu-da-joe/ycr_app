@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  before_action :authenticate_user!, except: [:index]
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :set_report, only: [:update, :add_song]
   before_action :set_report_for_edit, only: [:edit]
 
@@ -120,8 +120,16 @@ class ReportsController < ApplicationController
   end
 
   def show
-    @report = current_user.reports.includes(:concert, :report_body, sections: { set_list_orders: :song }).find(params[:id])
+    @report = Report.includes(:concert, :report_body, sections: { set_list_orders: :song })
+                   .find(params[:id])
     @existing_set_list_orders = @report.sections.first.set_list_orders if @report.sections.any?
+    
+    # 非公開（下書き）のレポートは作成者のみアクセス可能
+    if @report.draft? && (!user_signed_in? || @report.user != current_user)
+      redirect_to reports_path, alert: 'このレポートにはアクセスできません'
+      return
+    end
+  
   rescue ActiveRecord::RecordNotFound
     redirect_to reports_path, alert: 'レポートが見つかりません'
   end
