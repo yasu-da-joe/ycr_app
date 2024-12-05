@@ -1,7 +1,23 @@
 class ReportsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :set_report, only: [:update, :add_song]
   before_action :set_report_for_edit, only: [:edit]
+
+  def index
+    @reports = if user_signed_in?
+      case params[:status]
+      when 'draft'
+        current_user.reports.drafts.joins(:concert).order('concerts.date DESC')
+      when 'published'
+        current_user.reports.published.joins(:concert).order('concerts.date DESC')
+      else
+        current_user.reports.published.joins(:concert).order('concerts.date DESC')
+      end
+    else
+      # 未ログインユーザーには公開済みのレポートのみ表示
+      Report.published.joins(:concert).order('concerts.date DESC')
+    end
+  end
 
   def new
   latest_report = current_user.reports
@@ -68,45 +84,52 @@ class ReportsController < ApplicationController
   end
 
   def update
-    if params[:publish]
-      @report.report_status = :published
-      save_message = 'レポートを保存しました'
-    else
-      @report.report_status = :draft
-      save_message = '下書きを保存しました'
-    end
-
-    # コンサート情報の取得または作成
-    concert = Concert.find_or_create_by(
-      name: report_params[:concert_name],
-      artist: report_params[:artist_name],
-      date: report_params[:concert_date]
-    )
-
-    # レポートの関連付け
-    @report.concert = concert
-
-    # 感想の保存
-    if @report.report_body
-      @report.report_body.update(body: report_params[:impression])
-    else
-      @report.create_report_body(body: report_params[:impression])
-    end
-
-    respond_to do |format|
-      if @report.save
-        format.html { redirect_to report_path(@report), notice: save_message }
-        format.turbo_stream { redirect_to report_path(@report), notice: save_message }
+    response = catch(:response) do
+      if params[:publish]
+        @report.report_status = :published
+        save_message = 'レポートを保存しました'
       else
-        format.html { render :new, status: :unprocessable_entity }
-        format.turbo_stream { render :new, status: :unprocessable_entity }
+        @report.report_status = :draft
+        save_message = '下書きを保存しました'
+      end
+  
+      concert = Concert.find_or_create_by(
+        name: report_params[:concert_name],
+        artist: report_params[:artist_name],
+        date: report_params[:concert_date]
+      )
+  
+      @report.concert = concert
+  
+      if @report.report_body
+        @report.report_body.update(body: report_params[:impression])
+      else
+        @report.create_report_body(body: report_params[:impression])
+      end
+  
+      if @report.save
+        redirect_to report_path(@report), notice: save_message
+      else
+        @existing_set_list_orders = @report.sections.first&.set_list_orders || []
+        render :edit, status: :unprocessable_entity
       end
     end
+  
+    # 既にレスポンスが生成されている場合はそれを返す
+    return response if response
   end
 
   def show
-    @report = current_user.reports.includes(:concert, :report_body, sections: { set_list_orders: :song }).find(params[:id])
+    @report = Report.includes(:concert, :report_body, sections: { set_list_orders: :song })
+                   .find(params[:id])
     @existing_set_list_orders = @report.sections.first.set_list_orders if @report.sections.any?
+    
+    # 非公開（下書き）のレポートは作成者のみアクセス可能
+    if @report.draft? && (!user_signed_in? || @report.user != current_user)
+      redirect_to reports_path, alert: 'このレポートにはアクセスできません'
+      return
+    end
+  
   rescue ActiveRecord::RecordNotFound
     redirect_to reports_path, alert: 'レポートが見つかりません'
   end
@@ -223,6 +246,9 @@ class ReportsController < ApplicationController
     end
   end
 
+  def invitation
+  end
+
   private
 
   def report_params
@@ -240,20 +266,7 @@ class ReportsController < ApplicationController
     @report = current_user.reports.find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
     Rails.logger.error "Failed to find report: #{e.message}"
-    respond_to do |format|
-      format.html { redirect_to reports_path, alert: 'レポートが見つかりません' }
-      format.json { 
-        render json: { 
-          success: false, 
-          message: 'レポートが見つかりません', 
-          debug: {
-            user_id: current_user.id,
-            report_id: params[:id],
-            action: action_name
-          }
-        }, status: :not_found 
-      }
-    end
+    redirect_to reports_path, alert: 'レポートが見つかりません'
   end
 
   def set_report_for_edit

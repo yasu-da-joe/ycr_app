@@ -1,6 +1,21 @@
 <h1>コンサートレポートを編集</h1>
+<% if @report.errors.any? %>
+  <div class="error-message", style="color: red;">
+    <h3><%= pluralize(@report.errors.count, "つ") %> の項目が未入力です</h3>
+    <ul>
+      <% @report.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<%= form_with(model: @report, local: true, 
+    data: { 
+      controller: "report",  # この属性が正しく設定されているか
+      report_target: "form",  # この属性が正しく設定されているか
+      report_id: @report.id
+    }) do |form| %>
 
-  <%= form_with(model: @report, local: true) do |form| %>
   <div class="form-group">
     <%= form.label :concert_name, 'コンサート名（イベント名）', class: 'required' %>
     <%= form.text_field :concert_name, class: 'form-control' %>
@@ -49,12 +64,11 @@
   </div>
 <% end %>
 
-<div id="song-modal" class="modal fade" tabindex="-1" role="dialog">
+<div id="song-modal" class="modal fade" tabindex="-1" role="dialog"
+     data-report-debug="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <!-- モーダルの内容はAjaxで読み込まれます -->
     </div>
   </div>
 </div>
-
-<div id="flash-messages"></div>

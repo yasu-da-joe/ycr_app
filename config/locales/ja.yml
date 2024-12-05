@@ -3,6 +3,8 @@ ja:
     models:
       user: 'ユーザー'
       board: '掲示板'
+      report: レポート
+      concert: コンサート
     attributes:
       user:
         email: 'メールアドレス'
@@ -10,6 +12,11 @@ ja:
         password_confirmation: 'パスワード確認'
         last_name: '姓'
         first_name: '名'
+      concert:
+        name: コンサート名
+        date: コンサート日時
+        artist: アーティスト名
   time:
     formats:
       default: "%Y/%m/%d %H:%M:%S"
+ 

@@ -1,5 +1,5 @@
 class SearchController < ApplicationController
-  before_action :require_login, except: [:suggest_artists, :suggest_tracks]
+  before_action :authenticate_user!, except: [:suggest_artists, :suggest_tracks]
 
   def index
   end

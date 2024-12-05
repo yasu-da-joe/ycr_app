@@ -1,7 +1,15 @@
+console.log('=== report_controller.js loaded ===');
+console.log('File load timestamp:', new Date().toISOString());
+
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["form"]
+  static values = { reportFormId: String }  // 追加
+
+  initialize() {
+    console.log("=== Report Controller Initialized ===");
+  }
 
   connect() {
     console.log("Report controller connected");
@@ -76,7 +84,7 @@ export default class extends Controller {
   addSong(event) {
     console.log("=== Add Song Clicked ===");
     event.preventDefault();
-    
+
     if (this.isRequestInProgress) {
       console.log('Request already in progress');
       return;
@@ -84,16 +92,25 @@ export default class extends Controller {
     
     console.log("Form target in addSong:", this.formTarget);
     console.log("Report ID in addSong:", this.formTarget.dataset.reportId);
+    console.log("Report ID:", this.formTarget.dataset.reportId);  // データセットから直接取得
     
     this.isRequestInProgress = true;
-    const reportId = this.formTarget.dataset.reportId;
-    
+    const reportId = this.formTarget.dataset.reportId || event.currentTarget.dataset.reportId;
+    if (!reportId) {
+      console.error('Report ID is not available');
+      return;
+    }
+        
     console.log("Making fetch request to:", `/reports/${reportId}/add_song`);
     
     fetch(`/reports/${reportId}/add_song`, {
+      method: 'GET',
       headers: {
-        'Accept': 'text/html'
-      }
+        'Accept': 'text/html',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-Token': document.querySelector("[name='csrf-token']").content
+      },
+      credentials: 'same-origin'
     })
     .then(response => {
       console.log("Fetch response:", response);

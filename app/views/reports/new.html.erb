@@ -1,4 +1,14 @@
 <h1>コンサートレポートを書く</h1>
+<% if @report.errors.any? %>
+  <div style="color: red;">
+    <h2><%= pluralize(@report.errors.count, "error") %> prohibited this report from being saved:</h2>
+    <ul>
+      <% @report.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
   <div class="mb-4">
     <%= button_to '新規レポートを作成', create_new_reports_path,
       class: 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded',
@@ -7,7 +17,13 @@
       }
     %>
   </div>
-  <%= form_with(model: @report, local: true) do |form| %>
+  
+<%= form_with(model: @report, local: true, 
+    data: { 
+      controller: "report",
+      report_target: "form",
+      report_id: @report.id
+    }) do |form| %>
 
   <div class="form-group">
     <%= form.label :concert_name, 'コンサート名（イベント名）', class: 'required' %>
@@ -67,4 +83,3 @@
     </div>
   </div>
 </div>
-<div id="flash-messages"></div>

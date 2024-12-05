@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "static_pages/about_us"
+  get "static_pages/terms_of_service"
+  get "static_pages/privacy_policy"
   devise_for :users
   root 'reports#index'
   resources :set_list_orders, only: [:create, :update, :destroy]
@@ -17,6 +20,9 @@ Rails.application.routes.draw do
       patch 'update_song_order', on: :member
     end
     post 'create_new', on: :collection
+    collection do
+      get 'invitation'
+    end  
     member do
       get 'add_song'
       post 'add_song'
@@ -37,10 +43,7 @@ Rails.application.routes.draw do
   end
   resources :concerts
   get 'search/index'
-  get 'login', to: 'user_sessions#new', as: :login
-  post 'login', to: 'user_sessions#create'
   get 'mypage', to: 'users#mypage', as: :mypage
-  delete 'logout', to: 'user_sessions#destroy', as: :logout
 
   resources :tasks
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
